@@ -112,7 +112,7 @@ class GeneticAlgorithm:
         for meal, items in plan.items():
             for i, (food, grams) in enumerate(items):
                 if random.random() < self.mutation_rate:
-                    choice = random.choice(["swap", "grams", "shuffle"])
+                    choice = random.choice(["swap", "grams"])
 
                     if choice == "swap":
                         new_food = self._pick_food(MEAL_CATEGORIES[meal])
@@ -123,12 +123,6 @@ class GeneticAlgorithm:
                         delta = random.randint(-30, 30)
                         new_grams = max(low, min(high, grams + delta))
                         plan[meal][i] = (food, new_grams)
-
-                    elif choice == "shuffle":
-                        other = random.choice(list(MEAL_SLOTS.keys()))
-                        if other != meal and plan[other]:
-                            j = random.randrange(len(plan[other]))
-                            plan[meal][i], plan[other][j] = plan[other][j], plan[meal][i]
         return plan
 
     def run(self):

@@ -183,8 +183,12 @@ class NutriGenApp(tk.Tk):
 
         canvas.bind("<Configure>", lambda e: canvas.itemconfig(win_id, width=e.width))
         inner.bind("<Configure>",  lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
-        canvas.bind_all("<MouseWheel>",
-                        lambda e: canvas.yview_scroll(-1 * (e.delta // 120), "units"))
+        
+        def on_mousewheel_form(e):
+            canvas.yview_scroll(-1 * (e.delta // 120), "units")
+        
+        canvas.bind("<Enter>", lambda e: canvas.bind_all("<MouseWheel>", on_mousewheel_form))
+        canvas.bind("<Leave>", lambda e: canvas.unbind_all("<MouseWheel>"))
 
         pad = tk.Frame(inner, bg=BG)
         pad.pack(fill="both", expand=True, padx=70, pady=30)
@@ -369,8 +373,12 @@ class NutriGenApp(tk.Tk):
 
         canvas.bind("<Configure>", lambda e: canvas.itemconfig(win_id, width=e.width))
         inner.bind("<Configure>",  lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
-        canvas.bind_all("<MouseWheel>",
-                        lambda e: canvas.yview_scroll(-1 * (e.delta // 120), "units"))
+        
+        def on_mousewheel_results(e):
+            canvas.yview_scroll(-1 * (e.delta // 120), "units")
+        
+        canvas.bind("<Enter>", lambda e: canvas.bind_all("<MouseWheel>", on_mousewheel_results))
+        canvas.bind("<Leave>", lambda e: canvas.unbind_all("<MouseWheel>"))
 
         pad = tk.Frame(inner, bg=BG)
         pad.pack(fill="both", expand=True, padx=56, pady=28)
