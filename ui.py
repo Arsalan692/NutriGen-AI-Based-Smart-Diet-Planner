@@ -6,24 +6,22 @@ from calorie_calculator import ACTIVITY_LEVELS, GOALS
 from meal_planner import generate_meal_plan, get_meal_breakdown
 from data_loader import load_foods
 
-# ── Vibrant Nutrition Palette ────────────────────────────────────────────────
-BG      = "#f8fdf4"      # Fresh cream white
-CARD    = "#ffffff"      # Pure white cards
-CARD2   = "#f0f9eb"      # Light mint green
-CARD3   = "#e8f5e0"      # Soft green
-BORDER  = "#d4e8cc"      # Gentle green border
-ACCENT  = "#4caf50"      # Vibrant healthy green
-ACC2    = "#66bb6a"      # Fresh green
-ACC3    = "#81c784"      # Light green
-MUTED   = "#8bc34a"      # Lime green
-TEXT    = "#2e3b2e"      # Dark forest green
-TEXT2   = "#5a6c5a"      # Medium green-gray
-TEXT3   = "#7a8a7a"      # Light green-gray
-DANGER  = "#ff5252"      # Bright red
-GOLD    = "#ffa726"      # Vibrant orange
-GOLD2   = "#ffb74d"      # Light orange
+BG      = "#f8fdf4"
+CARD    = "#ffffff"
+CARD2   = "#f0f9eb"
+CARD3   = "#e8f5e0"
+BORDER  = "#d4e8cc"
+ACCENT  = "#4caf50"
+ACC2    = "#66bb6a"
+ACC3    = "#81c784"
+MUTED   = "#8bc34a"
+TEXT    = "#2e3b2e"
+TEXT2   = "#5a6c5a"
+TEXT3   = "#7a8a7a"
+DANGER  = "#ff5252"
+GOLD    = "#ffa726"
+GOLD2   = "#ffb74d"
 
-# ── Fonts ─────────────────────────────────────────────────────────────────────
 F_LOGO    = ("Georgia",       32, "bold")
 F_HERO    = ("Georgia",       52, "bold")
 F_HERO_S  = ("Georgia",       15, "italic")
@@ -39,19 +37,19 @@ F_MONO    = ("Courier New",   11)
 F_NAV     = ("Trebuchet MS",  11, "bold")
 
 MEAL_ACCENT = {
-    "Breakfast": "#ff9800",  # Sunrise orange
-    "Lunch":     "#4caf50",  # Fresh green
-    "Dinner":    "#2196f3",  # Evening blue
-    "Snack 1":   "#ffeb3b",  # Bright yellow
-    "Snack 2":   "#e91e63",  # Berry pink
+    "Breakfast": "#ff9800",
+    "Lunch":     "#4caf50",
+    "Dinner":    "#2196f3",
+    "Snack 1":   "#ffeb3b",
+    "Snack 2":   "#e91e63",
 }
 
 MEAL_BG = {
-    "Breakfast": "#fff3e0",  # Light orange
-    "Lunch":     "#e8f5e9",  # Light green
-    "Dinner":    "#e3f2fd",  # Light blue
-    "Snack 1":   "#fffde7",  # Light yellow
-    "Snack 2":   "#fce4ec",  # Light pink
+    "Breakfast": "#fff3e0",
+    "Lunch":     "#e8f5e9",
+    "Dinner":    "#e3f2fd",
+    "Snack 1":   "#fffde7",
+    "Snack 2":   "#fce4ec",
 }
 
 
@@ -132,7 +130,6 @@ class NutriGenApp(tk.Tk):
         for w in self.body.winfo_children():
             w.destroy()
 
-    # ── SCREEN 1 — WELCOME ────────────────────────────────────────────────────
     def _show_welcome(self):
         self._clear_body()
         self._set_nav(0)
@@ -150,7 +147,6 @@ class NutriGenApp(tk.Tk):
 
         pill_row = tk.Frame(outer, bg=BG)
         pill_row.pack(pady=(0, 34))
-        # FIX (Gap): Derive food count from CSV at runtime so this never goes stale
         try:
             _food_count = len(load_foods())
         except Exception:
@@ -174,7 +170,6 @@ class NutriGenApp(tk.Tk):
         tk.Label(outer, text="Powered by evolutionary optimisation",
                  bg=BG, fg=TEXT3, font=F_SMALL).pack(pady=(16, 0))
 
-    # ── SCREEN 2 — INPUT FORM ─────────────────────────────────────────────────
     def _show_form(self):
         self._clear_body()
         self._set_nav(1)
@@ -200,7 +195,6 @@ class NutriGenApp(tk.Tk):
         pad = tk.Frame(inner, bg=BG)
         pad.pack(fill="both", expand=True, padx=70, pady=30)
 
-        # ── Personal Details ──────────────────────────────────────────────────
         self._section(pad, "Personal Details")
 
         row1 = tk.Frame(pad, bg=BG)
@@ -214,7 +208,6 @@ class NutriGenApp(tk.Tk):
         self._slider_card(row1, "WEIGHT", "kg",    self.weight_var, 30, 180).pack(side="left", fill="both", expand=True, padx=(0, 10))
         self._slider_card(row1, "HEIGHT", "cm",    self.height_var, 120, 220).pack(side="left", fill="both", expand=True)
 
-        # ── Goals & Activity ──────────────────────────────────────────────────
         self._section(pad, "Goals & Activity")
 
         row2 = tk.Frame(pad, bg=BG)
@@ -250,7 +243,6 @@ class NutriGenApp(tk.Tk):
                      state="readonly", font=F_BODY
                      ).pack(fill="x", padx=18, pady=(0, 18))
 
-        # ── Food Exclusions ───────────────────────────────────────────────────
         self._section(pad, "Food Exclusions  (optional)")
 
         exc_card = self._card(pad)
@@ -267,7 +259,6 @@ class NutriGenApp(tk.Tk):
                      highlightcolor=ACCENT, borderwidth=1)
         e.pack(fill="x", padx=18, pady=(0, 18), ipady=8)
 
-        # ── Algorithm Settings ────────────────────────────────────────────────
         self._section(pad, "Algorithm Settings")
 
         row3 = tk.Frame(pad, bg=BG)
@@ -279,7 +270,6 @@ class NutriGenApp(tk.Tk):
         self._slider_card(row3, "GENERATIONS",    "",  self.gen_var, 40,  200).pack(side="left", fill="both", expand=True, padx=(0, 10))
         self._slider_card(row3, "POPULATION SIZE", "", self.pop_var, 20, 150).pack(side="left", fill="both", expand=True)
 
-        # ── Generate ──────────────────────────────────────────────────────────
         self.gen_btn = self._green_btn(pad, "Generate My Plan", self._run_ga, big=True)
         self.gen_btn.pack(pady=6)
 
@@ -360,7 +350,6 @@ class NutriGenApp(tk.Tk):
         self.btn_result.config(state="normal")
         self._show_results()
 
-    # ── SCREEN 3 — RESULTS ────────────────────────────────────────────────────
     def _show_results(self):
         if not self.result:
             messagebox.showinfo("No Plan Yet", "Generate a plan first.")
@@ -395,16 +384,11 @@ class NutriGenApp(tk.Tk):
         score     = self.result["fitness_score"]
         breakdown = get_meal_breakdown(self.result)
 
-        # ── Stat cards ────────────────────────────────────────────────────────
         self._section(pad, "Daily Targets")
 
         stat_row = tk.Frame(pad, bg=BG)
         stat_row.pack(fill="x", pady=(0, 18))
 
-        # FIX (Issue 4): Replaced misleading "MATCH %" (GA fitness score) with
-        # "CAL ±" showing the actual calorie deviation in kcal, which is what
-        # users actually care about. The GA fitness score is still used internally
-        # but is no longer surfaced as a "%" accuracy to avoid confusion.
         cal_diff     = round(abs(self.result["totals"]["calories"] - profile["target_calories"]), 1)
         cal_diff_str = f"+{cal_diff}" if self.result["totals"]["calories"] > profile["target_calories"] else f"-{cal_diff}"
 
@@ -426,7 +410,6 @@ class NutriGenApp(tk.Tk):
             tk.Label(c, text=unit, bg=CARD, fg=TEXT2,
                      font=F_BODY_S).pack(pady=(2, 14))
 
-        # ── Progress bars ─────────────────────────────────────────────────────
         self._section(pad, "Achieved vs Target")
 
         ach_card = self._card(pad)
@@ -466,7 +449,6 @@ class NutriGenApp(tk.Tk):
 
         tk.Frame(ach_card, bg=BG, height=6).pack()
 
-        # ── Meal cards ────────────────────────────────────────────────────────
         self._section(pad, "Your Meal Plan")
 
         for meal, data in breakdown.items():
@@ -509,7 +491,6 @@ class NutriGenApp(tk.Tk):
 
             tk.Frame(mc, bg=bg, height=10).pack()
 
-        # ── Bottom buttons ────────────────────────────────────────────────────
         btn_row = tk.Frame(pad, bg=BG)
         btn_row.pack(pady=28)
         self._green_btn(btn_row, "Regenerate Plan",
@@ -526,7 +507,6 @@ class NutriGenApp(tk.Tk):
         except Exception as e:
             messagebox.showerror("Visualisation Error", str(e))
 
-    # ── Helpers ───────────────────────────────────────────────────────────────
     def _card(self, parent):
         return tk.Frame(parent, bg=CARD,
                         highlightthickness=1, highlightbackground=BORDER,
@@ -559,10 +539,8 @@ class NutriGenApp(tk.Tk):
                          cursor="hand2")
 
     def _set_nav(self, active):
-        # FIX (Gap): Active tab gets ACC2 (brighter green) bg + bold underline effect;
-        # inactive enabled tabs get a clearly dimmer ACCENT so the active one stands out.
-        NAV_ACTIVE   = ACC2      # brighter highlight for selected tab
-        NAV_INACTIVE = ACCENT    # standard header green for non-selected tabs
+        NAV_ACTIVE   = ACC2
+        NAV_INACTIVE = ACCENT
         NAV_DISABLED_BG = "#cccccc"
         NAV_DISABLED_FG = "#888888"
 

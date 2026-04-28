@@ -1,4 +1,3 @@
-# Activity multipliers for TDEE calculation
 ACTIVITY_LEVELS = {
     "Sedentary (little or no exercise)":          1.2,
     "Lightly Active (exercise 1-3 days/week)":    1.375,
@@ -7,14 +6,12 @@ ACTIVITY_LEVELS = {
     "Extra Active (physical job or 2x training)": 1.9,
 }
 
-# Calorie adjustment per goal
 GOALS = {
     "Weight Loss":  -500,
     "Maintenance":     0,
     "Muscle Gain":  +300,
 }
 
-# Macro ratios (protein, carbs, fats) per goal
 MACRO_SPLITS = {
     "Weight Loss":  {"protein": 0.40, "carbs": 0.35, "fats": 0.25},
     "Maintenance":  {"protein": 0.30, "carbs": 0.40, "fats": 0.30},
@@ -23,7 +20,6 @@ MACRO_SPLITS = {
 
 
 def calculate_bmr(weight_kg, height_cm, age, gender):
-    # Mifflin-St Jeor formula
     if gender == "Male":
         return round((10 * weight_kg) + (6.25 * height_cm) - (5 * age) + 5, 1)
     else:
@@ -37,7 +33,6 @@ def calculate_tdee(bmr, activity_level):
 
 def calculate_target_calories(tdee, goal):
     adjustment = GOALS.get(goal, 0)
-    # never go below 1200 kcal
     return round(max(tdee + adjustment, 1200), 1)
 
 

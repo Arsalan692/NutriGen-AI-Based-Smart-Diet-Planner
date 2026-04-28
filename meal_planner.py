@@ -6,9 +6,6 @@ from genetic_algorithm import GeneticAlgorithm
 def generate_meal_plan(weight_kg, height_cm, age, gender, activity_level, goal,
                        excluded_foods=None, population_size=30, generations=60,
                        callback=None):
-    # FIX 4: Reduced defaults — gen=60, pop=30 instead of gen=100, pop=50
-    # Benchmarks show same quality output in ~3x less time
-
     all_foods = load_foods()
 
     if excluded_foods:
