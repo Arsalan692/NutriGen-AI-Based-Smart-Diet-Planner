@@ -267,8 +267,8 @@ class NutriGenApp(tk.Tk):
         row3 = tk.Frame(pad, bg=BG)
         row3.pack(fill="x", pady=(0, 24))
 
-        self.gen_var = tk.IntVar(value=100)
-        self.pop_var = tk.IntVar(value=50)
+        self.gen_var = tk.IntVar(value=60)
+        self.pop_var = tk.IntVar(value=30)
 
         self._slider_card(row3, "GENERATIONS",    "",  self.gen_var, 40,  200).pack(side="left", fill="both", expand=True, padx=(0, 10))
         self._slider_card(row3, "POPULATION SIZE", "", self.pop_var, 20, 150).pack(side="left", fill="both", expand=True)
