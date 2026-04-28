@@ -10,24 +10,24 @@ import numpy as np
 
 from meal_planner import get_meal_breakdown
 
-BG     = "#0f1a0f"
-CARD   = "#162416"
-CARD2  = "#1c2e1c"
-BORDER = "#2a3d2a"
-ACCENT = "#7ec44f"
-ACC2   = "#a8d876"
-MUTED  = "#4a6b3a"
-TEXT   = "#e8f0e0"
-TEXT2  = "#b0c4a0"
-RED    = "#e05c5c"
-GOLD   = "#d4a843"
+BG     = "#f8fdf4"
+CARD   = "#ffffff"
+CARD2  = "#f0f9eb"
+BORDER = "#d4e8cc"
+ACCENT = "#4caf50"
+ACC2   = "#66bb6a"
+MUTED  = "#8bc34a"
+TEXT   = "#2e3b2e"
+TEXT2  = "#5a6c5a"
+RED    = "#ff5252"
+GOLD   = "#ffa726"
 
 MEAL_COLORS = {
-    "Breakfast": "#5dade2",
-    "Lunch":     "#7ec44f",
-    "Dinner":    "#a8d876",
-    "Snack 1":   "#d4a843",
-    "Snack 2":   "#e07c5c",
+    "Breakfast": "#ff9800",
+    "Lunch":     "#4caf50",
+    "Dinner":    "#2196f3",
+    "Snack 1":   "#ffeb3b",
+    "Snack 2":   "#e91e63",
 }
 
 
@@ -42,12 +42,13 @@ def set_theme():
         "ytick.color":       TEXT2,
         "text.color":        TEXT,
         "grid.color":        BORDER,
-        "grid.alpha":        0.5,
+        "grid.alpha":        0.6,
         "legend.facecolor":  CARD,
         "legend.edgecolor":  BORDER,
         "legend.labelcolor": TEXT,
         "axes.spines.top":   False,
         "axes.spines.right": False,
+        "axes.linewidth":    1.5,
     })
 
 
@@ -231,16 +232,16 @@ def show_visualization(result):
     win.configure(bg=BG)
     win.resizable(True, True)
 
-    header = tk.Frame(win, bg=CARD, height=48)
+    header = tk.Frame(win, bg=ACCENT, height=52)
     header.pack(fill="x")
     header.pack_propagate(False)
-    tk.Label(header, text="✦ NutriGen — Visualisation", bg=CARD, fg=ACCENT,
-             font=("Georgia", 13, "bold")).pack(side="left", padx=20, pady=12)
+    tk.Label(header, text="NutriGen — Visualisation", bg=ACCENT, fg="#ffffff",
+             font=("Georgia", 14, "bold")).pack(side="left", padx=20, pady=14)
     tk.Label(header, text=f"Match: {round(result['fitness_score'] * 100, 1)}%",
-             bg=CARD, fg=TEXT2, font=("Trebuchet MS", 9)).pack(side="right", padx=20)
-    tk.Frame(win, bg=BORDER, height=1).pack(fill="x")
+             bg=ACCENT, fg="#e8f5e9", font=("Trebuchet MS", 10, "bold")).pack(side="right", padx=20)
+    tk.Frame(win, bg=ACC2, height=3).pack(fill="x")
 
-    tab_bar = tk.Frame(win, bg=CARD2, height=36)
+    tab_bar = tk.Frame(win, bg=CARD2, height=40)
     tab_bar.pack(fill="x")
     tab_bar.pack_propagate(False)
 
@@ -266,17 +267,19 @@ def show_visualization(result):
             f.pack_forget()
         frames[key].pack(fill="both", expand=True)
         for k, b in btn_map.items():
-            b.config(fg=ACCENT if k == key else TEXT2,
-                     bg=CARD  if k == key else CARD2)
+            if k == key:
+                b.config(fg="#ffffff", bg=ACCENT, relief="flat")
+            else:
+                b.config(fg=TEXT, bg=CARD2, relief="flat")
 
     for label, key in tabs:
-        b = tk.Button(tab_bar, text=label, bg=CARD2, fg=TEXT2,
-                      font=("Trebuchet MS", 9, "bold"),
-                      relief="flat", bd=0, padx=16, pady=8,
-                      activebackground=CARD, activeforeground=ACCENT,
+        b = tk.Button(tab_bar, text=label, bg=CARD2, fg=TEXT,
+                      font=("Trebuchet MS", 10, "bold"),
+                      relief="flat", bd=0, padx=18, pady=10,
+                      activebackground=ACCENT, activeforeground="#ffffff",
                       cursor="hand2",
                       command=lambda k=key: switch(k))
-        b.pack(side="left")
+        b.pack(side="left", padx=2)
         btn_map[key] = b
 
     fig1 = plt.figure(figsize=(10, 6.5), facecolor=BG)

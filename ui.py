@@ -5,22 +5,22 @@ import threading
 from calorie_calculator import ACTIVITY_LEVELS, GOALS
 from meal_planner import generate_meal_plan, get_meal_breakdown
 
-# ── Palette ───────────────────────────────────────────────────────────────────
-BG      = "#0d1a0d"
-CARD    = "#132213"
-CARD2   = "#1a2e1a"
-CARD3   = "#1f361f"
-BORDER  = "#2e4a2e"
-ACCENT  = "#6fcf3e"
-ACC2    = "#9de065"
-ACC3    = "#c8f09a"
-MUTED   = "#3d6b2a"
-TEXT    = "#edf5e5"
-TEXT2   = "#99bb88"
-TEXT3   = "#5a8045"
-DANGER  = "#e05c5c"
-GOLD    = "#e0b84a"
-GOLD2   = "#f5d07a"
+# ── Vibrant Nutrition Palette ────────────────────────────────────────────────
+BG      = "#f8fdf4"      # Fresh cream white
+CARD    = "#ffffff"      # Pure white cards
+CARD2   = "#f0f9eb"      # Light mint green
+CARD3   = "#e8f5e0"      # Soft green
+BORDER  = "#d4e8cc"      # Gentle green border
+ACCENT  = "#4caf50"      # Vibrant healthy green
+ACC2    = "#66bb6a"      # Fresh green
+ACC3    = "#81c784"      # Light green
+MUTED   = "#8bc34a"      # Lime green
+TEXT    = "#2e3b2e"      # Dark forest green
+TEXT2   = "#5a6c5a"      # Medium green-gray
+TEXT3   = "#7a8a7a"      # Light green-gray
+DANGER  = "#ff5252"      # Bright red
+GOLD    = "#ffa726"      # Vibrant orange
+GOLD2   = "#ffb74d"      # Light orange
 
 # ── Fonts ─────────────────────────────────────────────────────────────────────
 F_LOGO    = ("Georgia",       32, "bold")
@@ -38,19 +38,19 @@ F_MONO    = ("Courier New",   11)
 F_NAV     = ("Trebuchet MS",  11, "bold")
 
 MEAL_ACCENT = {
-    "Breakfast": "#5dade2",
-    "Lunch":     "#6fcf3e",
-    "Dinner":    "#9de065",
-    "Snack 1":   "#e0b84a",
-    "Snack 2":   "#e07c5c",
+    "Breakfast": "#ff9800",  # Sunrise orange
+    "Lunch":     "#4caf50",  # Fresh green
+    "Dinner":    "#2196f3",  # Evening blue
+    "Snack 1":   "#ffeb3b",  # Bright yellow
+    "Snack 2":   "#e91e63",  # Berry pink
 }
 
 MEAL_BG = {
-    "Breakfast": "#111e2a",
-    "Lunch":     "#132213",
-    "Dinner":    "#141f18",
-    "Snack 1":   "#1e1d10",
-    "Snack 2":   "#1e1510",
+    "Breakfast": "#fff3e0",  # Light orange
+    "Lunch":     "#e8f5e9",  # Light green
+    "Dinner":    "#e3f2fd",  # Light blue
+    "Snack 1":   "#fffde7",  # Light yellow
+    "Snack 2":   "#fce4ec",  # Light pink
 }
 
 
@@ -79,31 +79,32 @@ class NutriGenApp(tk.Tk):
         s.configure("TLabel",      background=BG,   foreground=TEXT,  font=F_BODY)
         s.configure("Card.TLabel", background=CARD, foreground=TEXT,  font=F_BODY)
         s.configure("TCombobox",
-                    fieldbackground=CARD2, background=CARD2,
-                    foreground=TEXT, selectbackground=MUTED,
-                    selectforeground=TEXT, font=F_BODY)
+                    fieldbackground=CARD, background=CARD,
+                    foreground=TEXT, selectbackground=ACC2,
+                    selectforeground="#ffffff", font=F_BODY,
+                    borderwidth=1, relief="solid")
         s.map("TCombobox",
-              fieldbackground=[("readonly", CARD2)],
+              fieldbackground=[("readonly", CARD)],
               foreground=[("readonly", TEXT)],
-              selectbackground=[("readonly", MUTED)])
+              selectbackground=[("readonly", ACC2)])
         s.configure("Horizontal.TScale",
-                    background=CARD, troughcolor=BORDER, sliderthickness=20)
+                    background=CARD, troughcolor=CARD2, sliderthickness=22)
         s.configure("green.Horizontal.TProgressbar",
-                    troughcolor=BORDER, background=ACCENT, thickness=6)
+                    troughcolor=CARD2, background=ACCENT, thickness=8)
 
     def _build_header(self):
-        bar = tk.Frame(self, bg=CARD, height=62)
+        bar = tk.Frame(self, bg=ACCENT, height=70)
         bar.pack(fill="x", side="top")
         bar.pack_propagate(False)
 
-        left = tk.Frame(bar, bg=CARD)
+        left = tk.Frame(bar, bg=ACCENT)
         left.pack(side="left", padx=24, pady=0)
-        tk.Label(left, text="✦ NutriGen", bg=CARD, fg=ACCENT,
+        tk.Label(left, text="NutriGen", bg=ACCENT, fg="#ffffff",
                  font=F_LOGO).pack(side="left")
-        tk.Label(left, text="  AI Halal Diet Planner", bg=CARD, fg=TEXT3,
-                 font=("Trebuchet MS", 11)).pack(side="left", pady=6)
+        tk.Label(left, text="  AI Halal Diet Planner", bg=ACCENT, fg="#e8f5e9",
+                 font=("Trebuchet MS", 11, "bold")).pack(side="left", pady=6)
 
-        self.nav_frame = tk.Frame(bar, bg=CARD)
+        self.nav_frame = tk.Frame(bar, bg=ACCENT)
         self.nav_frame.pack(side="right", padx=20)
 
         self.btn_home   = self._nav_btn("Home",    self._show_welcome)
@@ -111,15 +112,15 @@ class NutriGenApp(tk.Tk):
         self.btn_result = self._nav_btn("Results", self._show_results)
         self.btn_result.config(state="disabled")
 
-        tk.Frame(self, bg=ACCENT, height=2).pack(fill="x")
+        tk.Frame(self, bg=ACC2, height=3).pack(fill="x")
 
     def _nav_btn(self, text, cmd):
         b = tk.Button(self.nav_frame, text=text, command=cmd,
-                      bg=CARD, fg=TEXT2, font=F_NAV,
-                      relief="flat", bd=0, padx=16, pady=8,
-                      activebackground=CARD2, activeforeground=ACCENT,
+                      bg=ACCENT, fg="#ffffff", font=F_NAV,
+                      relief="flat", bd=0, padx=18, pady=10,
+                      activebackground=ACC2, activeforeground="#ffffff",
                       cursor="hand2")
-        b.pack(side="left", padx=2)
+        b.pack(side="left", padx=4)
         return b
 
     def _build_body(self):
@@ -144,23 +145,23 @@ class NutriGenApp(tk.Tk):
         tk.Label(outer, text="Your AI-powered halal meal planner",
                  bg=BG, fg=TEXT2, font=F_HERO_S).pack(pady=(6, 0))
 
-        tk.Frame(outer, bg=ACCENT, height=2, width=120).pack(pady=20)
+        tk.Frame(outer, bg=ACCENT, height=4, width=200).pack(pady=20)
 
         pill_row = tk.Frame(outer, bg=BG)
         pill_row.pack(pady=(0, 34))
         pills = [
-            ("🧬", "Genetic Algorithm"),
-            ("🥗", "182 Halal Foods"),
-            ("⚡", "Macro Optimised"),
+            ("Genetic Algorithm", "#e3f2fd"),
+            ("182 Halal Foods", "#e8f5e9"),
+            ("Macro Optimised", "#fff3e0"),
         ]
-        for icon, label in pills:
-            pill = tk.Frame(pill_row, bg=CARD2,
-                            highlightthickness=1, highlightbackground=BORDER)
-            pill.pack(side="left", padx=8)
-            tk.Label(pill, text=f" {icon}  {label} ", bg=CARD2, fg=ACC2,
-                     font=("Trebuchet MS", 11), padx=10, pady=10).pack()
+        for label, color in pills:
+            pill = tk.Frame(pill_row, bg=color,
+                            highlightthickness=2, highlightbackground=ACCENT)
+            pill.pack(side="left", padx=10)
+            tk.Label(pill, text=label, bg=color, fg=TEXT,
+                     font=("Trebuchet MS", 11, "bold"), padx=20, pady=15).pack()
 
-        btn = self._green_btn(outer, "  Generate My Diet Plan  →",
+        btn = self._green_btn(outer, "Generate My Diet Plan",
                               self._show_form, big=True)
         btn.pack(pady=6)
 
@@ -215,19 +216,19 @@ class NutriGenApp(tk.Tk):
 
         gc = self._card(row2)
         gc.pack(side="left", fill="both", expand=True, padx=(0, 10))
-        tk.Label(gc, text="GENDER", bg=CARD, fg=TEXT3, font=F_LABEL).pack(anchor="w", padx=18, pady=(16, 8))
+        tk.Label(gc, text="GENDER", bg=CARD, fg=TEXT, font=F_LABEL).pack(anchor="w", padx=18, pady=(16, 8))
         self.gender_var = tk.StringVar(value="Male")
         gf = tk.Frame(gc, bg=CARD)
         gf.pack(anchor="w", padx=18, pady=(0, 18))
         for g in ("Male", "Female"):
             tk.Radiobutton(gf, text=g, variable=self.gender_var, value=g,
-                           bg=CARD, fg=TEXT, selectcolor=CARD2,
+                           bg=CARD, fg=TEXT, selectcolor=ACCENT,
                            activebackground=CARD, activeforeground=ACCENT,
                            font=F_BODY).pack(side="left", padx=(0, 20))
 
         goalc = self._card(row2)
         goalc.pack(side="left", fill="both", expand=True, padx=(0, 10))
-        tk.Label(goalc, text="FITNESS GOAL", bg=CARD, fg=TEXT3, font=F_LABEL).pack(anchor="w", padx=18, pady=(16, 8))
+        tk.Label(goalc, text="FITNESS GOAL", bg=CARD, fg=TEXT, font=F_LABEL).pack(anchor="w", padx=18, pady=(16, 8))
         self.goal_var = tk.StringVar(value="Weight Loss")
         ttk.Combobox(goalc, textvariable=self.goal_var,
                      values=list(GOALS.keys()),
@@ -236,7 +237,7 @@ class NutriGenApp(tk.Tk):
 
         actc = self._card(row2)
         actc.pack(side="left", fill="both", expand=True)
-        tk.Label(actc, text="ACTIVITY LEVEL", bg=CARD, fg=TEXT3, font=F_LABEL).pack(anchor="w", padx=18, pady=(16, 8))
+        tk.Label(actc, text="ACTIVITY LEVEL", bg=CARD, fg=TEXT, font=F_LABEL).pack(anchor="w", padx=18, pady=(16, 8))
         self.activity_var = tk.StringVar(value="Moderately Active (exercise 3-5 days/week)")
         ttk.Combobox(actc, textvariable=self.activity_var,
                      values=list(ACTIVITY_LEVELS.keys()),
@@ -254,11 +255,11 @@ class NutriGenApp(tk.Tk):
                  ).pack(anchor="w", padx=18, pady=(14, 6))
         self.excl_var = tk.StringVar()
         e = tk.Entry(exc_card, textvariable=self.excl_var,
-                     bg=CARD2, fg=TEXT, insertbackground=ACCENT,
-                     relief="flat", font=F_BODY,
+                     bg=CARD, fg=TEXT, insertbackground=ACCENT,
+                     relief="solid", font=F_BODY,
                      highlightthickness=1, highlightbackground=BORDER,
-                     highlightcolor=ACCENT)
-        e.pack(fill="x", padx=18, pady=(0, 18), ipady=6)
+                     highlightcolor=ACCENT, borderwidth=1)
+        e.pack(fill="x", padx=18, pady=(0, 18), ipady=8)
 
         # ── Algorithm Settings ────────────────────────────────────────────────
         self._section(pad, "Algorithm Settings")
@@ -273,11 +274,11 @@ class NutriGenApp(tk.Tk):
         self._slider_card(row3, "POPULATION SIZE", "", self.pop_var, 20, 150).pack(side="left", fill="both", expand=True)
 
         # ── Generate ──────────────────────────────────────────────────────────
-        self.gen_btn = self._green_btn(pad, "  ◈  Generate My Plan  ", self._run_ga, big=True)
+        self.gen_btn = self._green_btn(pad, "Generate My Plan", self._run_ga, big=True)
         self.gen_btn.pack(pady=6)
 
         self.status_var = tk.StringVar(value="")
-        tk.Label(pad, textvariable=self.status_var, bg=BG, fg=TEXT2,
+        tk.Label(pad, textvariable=self.status_var, bg=BG, fg=TEXT,
                  font=F_BODY_S).pack(pady=(4, 0))
 
         self.progress = ttk.Progressbar(pad, style="green.Horizontal.TProgressbar",
@@ -285,7 +286,7 @@ class NutriGenApp(tk.Tk):
 
     def _slider_card(self, parent, label, unit, var, lo, hi):
         c = self._card(parent)
-        tk.Label(c, text=label, bg=CARD, fg=TEXT3,
+        tk.Label(c, text=label, bg=CARD, fg=TEXT,
                  font=F_LABEL).pack(anchor="w", padx=18, pady=(16, 4))
 
         val_row = tk.Frame(c, bg=CARD)
@@ -293,7 +294,7 @@ class NutriGenApp(tk.Tk):
         tk.Label(val_row, textvariable=var, bg=CARD, fg=ACCENT,
                  font=F_NUM).pack(side="left")
         if unit:
-            tk.Label(val_row, text=f"  {unit}", bg=CARD, fg=TEXT3,
+            tk.Label(val_row, text=f"  {unit}", bg=CARD, fg=TEXT2,
                      font=F_BODY_S).pack(side="left", pady=(6, 0))
 
         ttk.Scale(c, from_=lo, to=hi, variable=var, orient="horizontal",
@@ -316,8 +317,8 @@ class NutriGenApp(tk.Tk):
         excluded = [x.strip() for x in excl_raw.split(",") if x.strip()] if excl_raw else []
 
         self.ga_running = True
-        self.gen_btn.config(state="disabled", text="  Running…  ")
-        self.status_var.set("Initialising population…")
+        self.gen_btn.config(state="disabled", text="Running...")
+        self.status_var.set("Initialising population...")
         self.progress.pack(pady=(6, 14))
         self.progress.start(10)
 
@@ -348,8 +349,8 @@ class NutriGenApp(tk.Tk):
         self.progress.stop()
         self.progress.pack_forget()
         self.ga_running = False
-        self.gen_btn.config(state="normal", text="  ◈  Generate My Plan  ")
-        self.status_var.set("✦  Plan ready!")
+        self.gen_btn.config(state="normal", text="Generate My Plan")
+        self.status_var.set("Plan ready!")
         self.btn_result.config(state="normal")
         self._show_results()
 
@@ -395,19 +396,19 @@ class NutriGenApp(tk.Tk):
         stat_row.pack(fill="x", pady=(0, 18))
 
         stats = [
-            ("CALORIES", f"{profile['target_calories']}", "kcal"),
-            ("PROTEIN",  f"{profile['protein_g']}",       "g"),
-            ("CARBS",    f"{profile['carbs_g']}",         "g"),
-            ("FATS",     f"{profile['fats_g']}",          "g"),
-            ("BMI",      f"{profile['bmi']}",             profile["bmi_category"]),
-            ("MATCH",    f"{round(score * 100, 1)}",      "%"),
+            ("CALORIES", f"{profile['target_calories']}", "kcal", "#ff9800"),
+            ("PROTEIN",  f"{profile['protein_g']}",       "g",    "#4caf50"),
+            ("CARBS",    f"{profile['carbs_g']}",         "g",    "#2196f3"),
+            ("FATS",     f"{profile['fats_g']}",          "g",    "#ffc107"),
+            ("BMI",      f"{profile['bmi']}",             profile["bmi_category"], "#9c27b0"),
+            ("MATCH",    f"{round(score * 100, 1)}",      "%",    "#4caf50"),
         ]
-        for label, val, unit in stats:
+        for label, val, unit, color in stats:
             c = self._card(stat_row)
             c.pack(side="left", fill="both", expand=True, padx=3)
-            tk.Label(c, text=label, bg=CARD, fg=TEXT3,
+            tk.Label(c, text=label, bg=CARD, fg=TEXT,
                      font=F_LABEL).pack(pady=(14, 2))
-            tk.Label(c, text=val, bg=CARD, fg=ACCENT,
+            tk.Label(c, text=val, bg=CARD, fg=color,
                      font=F_NUM_S).pack()
             tk.Label(c, text=unit, bg=CARD, fg=TEXT2,
                      font=F_BODY_S).pack(pady=(2, 14))
@@ -498,9 +499,9 @@ class NutriGenApp(tk.Tk):
         # ── Bottom buttons ────────────────────────────────────────────────────
         btn_row = tk.Frame(pad, bg=BG)
         btn_row.pack(pady=28)
-        self._green_btn(btn_row, "  ◈  Regenerate Plan  ",
+        self._green_btn(btn_row, "Regenerate Plan",
                         self._show_form).pack(side="left", padx=10)
-        self._outline_btn(btn_row, "  View Visualisation  ",
+        self._outline_btn(btn_row, "View Visualisation",
                           self._open_viz).pack(side="left", padx=10)
 
     def _open_viz(self):
@@ -515,34 +516,51 @@ class NutriGenApp(tk.Tk):
     # ── Helpers ───────────────────────────────────────────────────────────────
     def _card(self, parent):
         return tk.Frame(parent, bg=CARD,
-                        highlightthickness=1, highlightbackground=BORDER)
+                        highlightthickness=1, highlightbackground=BORDER,
+                        relief="flat")
 
     def _section(self, parent, text):
         row = tk.Frame(parent, bg=BG)
-        row.pack(fill="x", pady=(20, 8))
+        row.pack(fill="x", pady=(24, 12))
+        
         tk.Label(row, text=text, bg=BG, fg=TEXT,
                  font=F_SECTION).pack(side="left")
-        tk.Frame(row, bg=BORDER, height=1).pack(side="left", fill="x",
-                                                 expand=True, padx=(12, 0), pady=6)
+        tk.Frame(row, bg=ACCENT, height=2).pack(side="left", fill="x",
+                                                 expand=True, padx=(12, 0), pady=8)
 
     def _green_btn(self, parent, text, cmd, big=False):
-        font = ("Trebuchet MS", 13, "bold") if big else ("Trebuchet MS", 11, "bold")
+        font = ("Trebuchet MS", 14, "bold") if big else ("Trebuchet MS", 11, "bold")
+        pady = 14 if big else 12
         return tk.Button(parent, text=text, command=cmd,
-                         bg=ACCENT, fg=BG, font=font,
-                         relief="flat", bd=0, padx=26, pady=12,
-                         activebackground=ACC2, activeforeground=BG,
+                         bg=ACCENT, fg="#ffffff", font=font,
+                         relief="flat", bd=0, padx=28, pady=pady,
+                         activebackground=ACC2, activeforeground="#ffffff",
                          cursor="hand2")
 
     def _outline_btn(self, parent, text, cmd):
         return tk.Button(parent, text=text, command=cmd,
-                         bg=BG, fg=ACCENT, font=("Trebuchet MS", 11, "bold"),
-                         relief="flat", bd=0, padx=26, pady=12,
-                         highlightthickness=1, highlightbackground=ACCENT,
-                         activebackground=CARD, activeforeground=ACC2,
+                         bg="#ffffff", fg=ACCENT, font=("Trebuchet MS", 11, "bold"),
+                         relief="solid", bd=2, padx=26, pady=10,
+                         highlightthickness=0,
+                         activebackground=CARD2, activeforeground=ACCENT,
                          cursor="hand2")
 
     def _set_nav(self, active):
+        colors = ["#ffffff", "#ffffff", "#ffffff"]
+        bgs = [ACCENT, ACCENT, ACCENT]
+        
+        if active == 0:
+            colors[0] = "#ffffff"
+            bgs[0] = ACC2
+        elif active == 1:
+            colors[1] = "#ffffff"
+            bgs[1] = ACC2
+        elif active == 2:
+            colors[2] = "#ffffff"
+            bgs[2] = ACC2
+            
         for i, b in enumerate([self.btn_home, self.btn_form, self.btn_result]):
             if b["state"] == "disabled":
+                b.config(bg="#cccccc", fg="#888888")
                 continue
-            b.config(fg=ACCENT if i == active else TEXT2)
+            b.config(fg=colors[i], bg=bgs[i])
