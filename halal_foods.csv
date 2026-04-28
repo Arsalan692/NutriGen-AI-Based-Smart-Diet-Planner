@@ -1,0 +1,183 @@
+food_name,category,calories,protein,carbs,fats,fiber
+Chicken Breast (grilled),Protein,165,31,0,3.6,0
+Chicken Thigh (grilled),Protein,209,26,0,11,0
+Chicken Drumstick,Protein,172,28,0,6,0
+Chicken Liver,Protein,119,17,0.9,4.8,0
+Whole Chicken (roasted),Protein,239,27,0,14,0
+Chicken Wings (grilled),Protein,203,30,0,9,0
+Chicken Seekh Kebab,Protein,185,22,5,9,0.5
+Chicken Shami Kebab,Protein,178,18,8,8,1
+Chicken Tikka,Protein,157,28,2,4,0
+Beef Mince (lean),Protein,215,26,0,12,0
+Beef Steak,Protein,271,26,0,18,0
+Beef Liver,Protein,135,20,4,4,0
+Beef Nihari (meat only),Protein,245,28,2,14,0
+Beef Boti (grilled),Protein,250,27,0,15,0
+Beef Seekh Kebab,Protein,220,23,5,12,0.5
+Beef Shami Kebab,Protein,210,20,8,11,1
+Mutton/Lamb Chops,Protein,294,25,0,21,0
+Mutton Mince,Protein,260,23,0,18,0
+Lamb Leg (roasted),Protein,191,28,0,8,0
+Goat Meat (cooked),Protein,143,27,0,3,0
+Mutton Karahi (meat only),Protein,270,26,2,17,0
+Haleem (beef),Protein,180,14,15,7,3
+Tuna (canned in water),Protein,116,25,0,1,0
+Salmon (grilled),Protein,208,20,0,13,0
+Tilapia (grilled),Protein,128,26,0,2.7,0
+Prawns/Shrimp (boiled),Protein,99,24,0,0.3,0
+Sardines (canned),Protein,208,25,0,11,0
+Catfish (grilled),Protein,105,18,0,3,0
+Mackerel (grilled),Protein,205,19,0,14,0
+Herring (grilled),Protein,203,23,0,12,0
+Cod (grilled),Protein,105,23,0,1,0
+Crab (boiled),Protein,97,21,0,1.5,0
+Rohu Fish (grilled),Protein,97,17,0,3,0
+Pomfret (grilled),Protein,96,18,0,2.5,0
+Eggs (whole boiled),Protein,155,13,1.1,11,0
+Egg Whites,Protein,52,11,0.7,0.2,0
+Scrambled Eggs,Protein,148,10,1.4,11,0
+Whole Milk,Dairy,61,3.2,4.8,3.3,0
+Skimmed Milk,Dairy,34,3.4,5,0.1,0
+Greek Yogurt,Dairy,59,10,3.6,0.4,0
+Plain Yogurt,Dairy,61,3.5,4.7,3.3,0
+Cottage Cheese,Dairy,98,11,3.4,4.3,0
+Cheddar Cheese,Dairy,402,25,1.3,33,0
+Mozzarella Cheese,Dairy,280,28,2.2,17,0
+Butter,Dairy,717,0.9,0.1,81,0
+Cream Cheese,Dairy,342,6,4.1,34,0
+Paneer,Dairy,265,18,3.4,20,0
+Oat Milk,Dairy,47,1,8,1.5,0.8
+Almond Milk,Dairy,17,0.6,1.4,1.1,0.3
+Laban / Buttermilk,Dairy,40,3.3,4.8,0.9,0
+Halloumi Cheese,Dairy,316,21,0.5,26,0
+Lassi (plain),Dairy,70,3.5,8,2.5,0
+Kheer (rice pudding),Dairy,150,4,26,4,0.3
+Rabri,Dairy,180,5,28,6,0
+White Rice (cooked),Grains,130,2.7,28,0.3,0.4
+Brown Rice (cooked),Grains,216,5,45,1.8,3.5
+Basmati Rice (cooked),Grains,121,3.5,25,0.4,0.4
+Biryani Rice (plain),Grains,180,4,36,3,0.5
+Wheat Roti,Grains,297,9,62,1.2,2.2
+Whole Wheat Roti,Grains,264,10,55,1.5,4.6
+Naan,Grains,310,9,55,5,2
+Paratha (plain),Grains,297,7,40,13,2
+Puri,Grains,340,6,38,18,1.5
+Oats (cooked),Grains,71,2.5,12,1.4,1.7
+Bread (white),Grains,265,9,49,3.2,2.7
+Whole Wheat Bread,Grains,247,13,41,4.2,7
+Pasta (cooked),Grains,131,5,25,1.1,1.8
+Macaroni (cooked),Grains,131,5,25,0.6,1.8
+Semolina / Suji (cooked),Grains,55,2,11,0.3,0.6
+Cornflakes,Grains,357,8,84,0.4,3.8
+Sooji Halwa,Grains,220,3,35,8,0.5
+Vermicelli / Seviyan (cooked),Grains,130,4,26,1.5,0.5
+Barley (cooked),Grains,123,3.5,28,0.4,6
+Quinoa (cooked),Grains,120,4.4,21,1.9,2.8
+Rice Cakes,Grains,387,8,81,3,0.4
+French Toast,Grains,229,8,26,10,1
+Pancakes (plain),Grains,227,6,28,10,0.9
+Lentils / Masoor Dal (cooked),Legumes,116,9,20,0.4,7.9
+Red Kidney Beans / Rajma (cooked),Legumes,127,8.7,22,0.5,7.4
+Chickpeas / Chana (cooked),Legumes,164,8.9,27,2.6,7.6
+Black Eyed Peas (cooked),Legumes,160,5.2,20,0.7,8
+Green Mung Beans (cooked),Legumes,105,7,19,0.4,7.6
+Split Peas / Chana Dal (cooked),Legumes,118,8.3,21,0.4,8.3
+Soybean (cooked),Legumes,173,17,10,9,6
+Urad Dal (cooked),Legumes,105,7.6,19,0.4,3.3
+Toor Dal (cooked),Legumes,116,8.5,20,0.4,6.4
+Moth Beans (cooked),Legumes,114,8.3,20,0.5,7.5
+Hummus,Legumes,166,8,14,10,6
+Potato (boiled),Vegetables,87,1.9,20,0.1,1.8
+Sweet Potato (boiled),Vegetables,76,1.4,18,0.1,2.5
+Tomato,Vegetables,18,0.9,3.9,0.2,1.2
+Onion,Vegetables,40,1.1,9.3,0.1,1.7
+Garlic,Vegetables,149,6.4,33,0.5,2.1
+Spinach (cooked),Vegetables,23,2.9,3.6,0.4,2.4
+Broccoli (cooked),Vegetables,35,2.4,7.2,0.4,3.3
+Cauliflower (cooked),Vegetables,23,1.8,4.1,0.5,2
+Carrot (raw),Vegetables,41,0.9,10,0.2,2.8
+Cucumber (raw),Vegetables,16,0.6,3.6,0.1,0.5
+Capsicum / Bell Pepper,Vegetables,20,0.9,4.6,0.2,1.7
+Cabbage (cooked),Vegetables,23,1.3,5.1,0.1,2
+Bitter Gourd / Karela,Vegetables,17,1,3.7,0.2,2.8
+Bottle Gourd / Lauki,Vegetables,15,0.6,3.4,0.02,0.5
+Eggplant / Baingan (cooked),Vegetables,35,0.8,8.7,0.2,2.5
+Peas (cooked),Vegetables,84,5.4,15,0.2,5.5
+Corn / Maize (cooked),Vegetables,96,3.4,21,1.5,2.4
+Mushroom (cooked),Vegetables,28,1.9,5.3,0.4,1.7
+Okra / Bhindi (cooked),Vegetables,33,2,7.5,0.2,3.2
+Zucchini (cooked),Vegetables,17,1.2,3.5,0.3,1.1
+Pumpkin (cooked),Vegetables,20,0.7,5,0.1,0.5
+Leek,Vegetables,31,0.8,7.6,0.2,1.8
+Turnip (cooked),Vegetables,20,0.7,5,0.1,1.2
+Fenugreek Leaves / Methi,Vegetables,49,4.4,6,1,3.9
+Radish (raw),Vegetables,16,0.7,3.4,0.1,1.6
+Beetroot (cooked),Vegetables,44,1.7,10,0.2,2
+Spring Onion,Vegetables,32,1.8,7.3,0.2,2.6
+Moringa / Drumstick Leaves,Vegetables,64,9.4,8.3,1.4,2
+Tinda / Apple Gourd,Vegetables,18,0.5,3.9,0.2,0.6
+Arvi / Taro Root (cooked),Vegetables,142,0.5,34.6,0.1,4.3
+Fenugreek Seeds,Vegetables,323,23,58,6,25
+Celery,Vegetables,14,0.7,3,0.2,1.6
+Lettuce,Vegetables,15,1.4,2.9,0.2,1.3
+Kale (cooked),Vegetables,28,1.9,5.6,0.4,2
+Apple,Fruits,52,0.3,14,0.2,2.4
+Banana,Fruits,89,1.1,23,0.3,2.6
+Orange,Fruits,47,0.9,12,0.1,2.4
+Mango,Fruits,60,0.8,15,0.4,1.6
+Watermelon,Fruits,30,0.6,8,0.2,0.4
+Grapes,Fruits,69,0.7,18,0.2,0.9
+Strawberry,Fruits,32,0.7,7.7,0.3,2
+Pomegranate,Fruits,83,1.7,19,1.2,4
+Guava,Fruits,68,2.6,14,1,5.4
+Papaya,Fruits,43,0.5,11,0.3,1.7
+Pear,Fruits,57,0.4,15,0.1,3.1
+Pineapple,Fruits,50,0.5,13,0.1,1.4
+Dates,Fruits,277,1.8,75,0.2,6.7
+Peach,Fruits,39,0.9,10,0.3,1.5
+Plum,Fruits,46,0.7,11,0.3,1.4
+Lychee,Fruits,66,0.8,17,0.4,1.3
+Kiwi,Fruits,61,1.1,15,0.5,3
+Apricot,Fruits,48,1.4,11,0.4,2
+Coconut (fresh),Fruits,354,3.3,15,33,9
+Fig (fresh),Fruits,74,0.8,19,0.3,3
+Lemon,Fruits,29,1.1,9,0.3,2.8
+Grapefruit,Fruits,42,0.8,11,0.1,1.6
+Melon / Kharbooza,Fruits,34,0.8,8,0.2,0.9
+Mulberry,Fruits,43,1.4,10,0.4,1.7
+Chikoo / Sapodilla,Fruits,83,0.4,20,1.1,5.3
+Jamun / Black Plum,Fruits,60,0.7,14,0.2,0.6
+Almonds,Nuts & Seeds,579,21,22,50,12.5
+Walnuts,Nuts & Seeds,654,15,14,65,6.7
+Cashews,Nuts & Seeds,553,18,30,44,3.3
+Pistachios,Nuts & Seeds,562,20,28,45,10.6
+Peanuts,Nuts & Seeds,567,26,16,49,8.5
+Sunflower Seeds,Nuts & Seeds,584,21,20,51,8.6
+Pumpkin Seeds,Nuts & Seeds,559,30,11,49,6
+Flaxseeds,Nuts & Seeds,534,18,29,42,27.3
+Sesame Seeds,Nuts & Seeds,573,18,23,50,11.8
+Chia Seeds,Nuts & Seeds,486,17,42,31,34.4
+Hazelnuts,Nuts & Seeds,628,15,17,61,9.7
+Pine Nuts,Nuts & Seeds,673,14,13,68,3.7
+Macadamia Nuts,Nuts & Seeds,718,8,14,76,8.6
+Peanut Butter,Nuts & Seeds,588,25,20,50,6
+Tahini,Nuts & Seeds,595,17,21,54,9.3
+Olive Oil,Fats & Oils,884,0,0,100,0
+Coconut Oil,Fats & Oils,862,0,0,100,0
+Mustard Oil,Fats & Oils,884,0,0,100,0
+Ghee,Fats & Oils,900,0,0,100,0
+Sunflower Oil,Fats & Oils,884,0,0,100,0
+Canola Oil,Fats & Oils,884,0,0,100,0
+Honey,Other,304,0.3,82,0,0.2
+Dark Chocolate (70%+),Other,598,8,46,43,11
+Tomato Paste,Other,82,4.3,19,0.5,4.1
+Green Tea (brewed),Beverages,1,0,0.2,0,0
+Black Tea (brewed),Beverages,1,0,0.3,0,0
+Milk Tea (with milk & sugar),Beverages,45,1.5,7,1.2,0
+Lemon Water,Beverages,4,0.1,1.1,0,0.1
+Fresh Orange Juice,Beverages,45,0.7,10,0.2,0.2
+Mango Juice (fresh),Beverages,60,0.5,15,0.3,0.3
+Sugarcane Juice,Beverages,269,0,73,0.3,0
+Coconut Water,Beverages,19,0.7,3.7,0.2,1.1
+Rooh Afza Drink (diluted),Beverages,50,0,13,0,0
+Protein Shake (whey+water),Beverages,120,24,3,1.5,0
