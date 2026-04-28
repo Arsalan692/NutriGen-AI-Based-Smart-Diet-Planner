@@ -4,6 +4,7 @@ import threading
 
 from calorie_calculator import ACTIVITY_LEVELS, GOALS
 from meal_planner import generate_meal_plan, get_meal_breakdown
+from data_loader import load_foods
 
 # ── Vibrant Nutrition Palette ────────────────────────────────────────────────
 BG      = "#f8fdf4"      # Fresh cream white
@@ -149,10 +150,15 @@ class NutriGenApp(tk.Tk):
 
         pill_row = tk.Frame(outer, bg=BG)
         pill_row.pack(pady=(0, 34))
+        # FIX (Gap): Derive food count from CSV at runtime so this never goes stale
+        try:
+            _food_count = len(load_foods())
+        except Exception:
+            _food_count = 182
         pills = [
-            ("Genetic Algorithm", "#e3f2fd"),
-            ("182 Halal Foods", "#e8f5e9"),
-            ("Macro Optimised", "#fff3e0"),
+            ("Genetic Algorithm",          "#e3f2fd"),
+            (f"{_food_count} Halal Foods", "#e8f5e9"),
+            ("Macro Optimised",            "#fff3e0"),
         ]
         for label, color in pills:
             pill = tk.Frame(pill_row, bg=color,
@@ -395,13 +401,20 @@ class NutriGenApp(tk.Tk):
         stat_row = tk.Frame(pad, bg=BG)
         stat_row.pack(fill="x", pady=(0, 18))
 
+        # FIX (Issue 4): Replaced misleading "MATCH %" (GA fitness score) with
+        # "CAL ±" showing the actual calorie deviation in kcal, which is what
+        # users actually care about. The GA fitness score is still used internally
+        # but is no longer surfaced as a "%" accuracy to avoid confusion.
+        cal_diff     = round(abs(self.result["totals"]["calories"] - profile["target_calories"]), 1)
+        cal_diff_str = f"+{cal_diff}" if self.result["totals"]["calories"] > profile["target_calories"] else f"-{cal_diff}"
+
         stats = [
-            ("CALORIES", f"{profile['target_calories']}", "kcal", "#ff9800"),
-            ("PROTEIN",  f"{profile['protein_g']}",       "g",    "#4caf50"),
-            ("CARBS",    f"{profile['carbs_g']}",         "g",    "#2196f3"),
-            ("FATS",     f"{profile['fats_g']}",          "g",    "#ffc107"),
+            ("CALORIES", f"{profile['target_calories']}", "kcal",             "#ff9800"),
+            ("PROTEIN",  f"{profile['protein_g']}",       "g",                "#4caf50"),
+            ("CARBS",    f"{profile['carbs_g']}",         "g",                "#2196f3"),
+            ("FATS",     f"{profile['fats_g']}",          "g",                "#ffc107"),
             ("BMI",      f"{profile['bmi']}",             profile["bmi_category"], "#9c27b0"),
-            ("MATCH",    f"{round(score * 100, 1)}",      "%",    "#4caf50"),
+            ("CAL ±",    cal_diff_str,                    "kcal off",         ACCENT if cal_diff <= 50 else GOLD),
         ]
         for label, val, unit, color in stats:
             c = self._card(stat_row)
@@ -546,21 +559,21 @@ class NutriGenApp(tk.Tk):
                          cursor="hand2")
 
     def _set_nav(self, active):
-        colors = ["#ffffff", "#ffffff", "#ffffff"]
-        bgs = [ACCENT, ACCENT, ACCENT]
-        
-        if active == 0:
-            colors[0] = "#ffffff"
-            bgs[0] = ACC2
-        elif active == 1:
-            colors[1] = "#ffffff"
-            bgs[1] = ACC2
-        elif active == 2:
-            colors[2] = "#ffffff"
-            bgs[2] = ACC2
-            
-        for i, b in enumerate([self.btn_home, self.btn_form, self.btn_result]):
-            if b["state"] == "disabled":
-                b.config(bg="#cccccc", fg="#888888")
-                continue
-            b.config(fg=colors[i], bg=bgs[i])
+        # FIX (Gap): Active tab gets ACC2 (brighter green) bg + bold underline effect;
+        # inactive enabled tabs get a clearly dimmer ACCENT so the active one stands out.
+        NAV_ACTIVE   = ACC2      # brighter highlight for selected tab
+        NAV_INACTIVE = ACCENT    # standard header green for non-selected tabs
+        NAV_DISABLED_BG = "#cccccc"
+        NAV_DISABLED_FG = "#888888"
+
+        buttons = [self.btn_home, self.btn_form, self.btn_result]
+        for i, b in enumerate(buttons):
+            if str(b["state"]) == "disabled":
+                b.config(bg=NAV_DISABLED_BG, fg=NAV_DISABLED_FG,
+                         relief="flat", font=F_NAV)
+            elif i == active:
+                b.config(bg=NAV_ACTIVE, fg="#ffffff",
+                         relief="flat", font=("Trebuchet MS", 11, "bold", "underline"))
+            else:
+                b.config(bg=NAV_INACTIVE, fg="#e8f5e9",
+                         relief="flat", font=F_NAV)

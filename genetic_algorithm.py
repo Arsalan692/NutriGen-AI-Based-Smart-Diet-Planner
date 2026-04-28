@@ -9,15 +9,17 @@ MEAL_SLOTS = {
     "Snack 2":   {"count": 2, "grams_range": (30, 100)},
 }
 
+# FIX (Issue 2): Added "Fats & Oils" to Breakfast, Lunch, and Dinner so
+# ghee/oils are reachable by the GA. Kept out of snacks (not appropriate).
 MEAL_CATEGORIES = {
-    "Breakfast": ["Grains", "Dairy", "Fruits", "Protein", "Nuts & Seeds", "Beverages"],
-    "Lunch":     ["Grains", "Protein", "Vegetables", "Legumes", "Dairy"],
-    "Dinner":    ["Grains", "Protein", "Vegetables", "Legumes", "Dairy"],
+    "Breakfast": ["Grains", "Dairy", "Fruits", "Protein", "Nuts & Seeds", "Beverages", "Fats & Oils"],
+    "Lunch":     ["Grains", "Protein", "Vegetables", "Legumes", "Dairy", "Fats & Oils"],
+    "Dinner":    ["Grains", "Protein", "Vegetables", "Legumes", "Dairy", "Fats & Oils"],
     "Snack 1":   ["Fruits", "Nuts & Seeds", "Dairy", "Other", "Beverages"],
     "Snack 2":   ["Fruits", "Nuts & Seeds", "Dairy", "Other", "Beverages"],
 }
 
-# FIX 1: Target calorie share per meal (realistic daily distribution)
+# Target calorie share per meal (realistic daily distribution)
 # Breakfast 25%, Lunch 30%, Dinner 30%, Snack1 8%, Snack2 7%
 MEAL_CALORIE_TARGETS = {
     "Breakfast": 0.25,
@@ -27,7 +29,7 @@ MEAL_CALORIE_TARGETS = {
     "Snack 2":   0.07,
 }
 
-# FIX 2: Max allowed protein sources per meal (prevents 2x meat combos)
+# Max allowed protein sources per meal (prevents 2x meat combos)
 MAX_PROTEIN_ITEMS = {
     "Breakfast": 1,
     "Lunch":     1,
@@ -36,7 +38,21 @@ MAX_PROTEIN_ITEMS = {
     "Snack 2":   1,
 }
 
-# FIX 3: Minimum calories per snack to avoid near-zero snacks
+# FIX (Issue 2): Oils are condiments, not main dishes. Cap at 1 per meal
+# so a plan never ends up with 3 different oils at lunch.
+MAX_FATS_OILS_ITEMS = {
+    "Breakfast": 1,
+    "Lunch":     1,
+    "Dinner":    1,
+    "Snack 1":   0,
+    "Snack 2":   0,
+}
+
+# FIX (Issue 3): Max items from the same category within a single snack slot.
+# Prevents Greek Yogurt + Cottage Cheese (both Dairy) in one snack.
+SNACK_MAX_PER_CATEGORY = 1
+
+# Minimum calories per snack to avoid near-zero snacks
 SNACK_MIN_CALORIES = 80
 
 
@@ -44,7 +60,6 @@ class GeneticAlgorithm:
     def __init__(self, foods, target_calories, target_protein, target_carbs, target_fats,
                  population_size=30, generations=60, mutation_rate=0.15,
                  crossover_rate=0.8, elitism_count=5, callback=None):
-        # FIX 4: Reduced defaults — gen=60, pop=30 gives same quality 3x faster
 
         self.foods           = foods
         self.target_calories = target_calories
@@ -72,16 +87,36 @@ class GeneticAlgorithm:
         self.fitness_history     = []
         self.avg_fitness_history = []
 
-    def _pick_food(self, allowed_cats, exclude_cats=None):
+    def _pick_food(self, allowed_cats, exclude_cats=None, exclude_names=None):
+        """
+        Pick a random food from the allowed categories.
+        exclude_cats: set of category strings to skip entirely.
+        exclude_names: set of food name strings already used (cross-meal).
+        Falls back gracefully if exclusions leave the pool empty.
+        """
         pool = []
         for cat in allowed_cats:
             if exclude_cats and cat in exclude_cats:
                 continue
             pool.extend(self.cat_map.get(cat, []))
+
+        # FIX (Issue 1): Remove foods already used elsewhere in the day
+        if exclude_names:
+            filtered = [f for f in pool if f["name"] not in exclude_names]
+            if filtered:
+                pool = filtered
+            # If every candidate is already used, fall through with full pool
+            # (better a repeat than an empty plan)
+
         if not pool:
-            # Fallback: use full allowed pool ignoring exclusion
+            # Fallback: ignore category exclusions, keep name filter
             for cat in allowed_cats:
                 pool.extend(self.cat_map.get(cat, []))
+            if exclude_names:
+                filtered = [f for f in pool if f["name"] not in exclude_names]
+                if filtered:
+                    pool = filtered
+
         return random.choice(pool) if pool else random.choice(self.foods)
 
     def _pick_grams(self, grams_range):
@@ -90,24 +125,48 @@ class GeneticAlgorithm:
 
     def _make_plan(self):
         plan = {}
+        # FIX (Issue 1): Track all food names placed across the whole day
+        used_names = set()
+
         for meal, cfg in MEAL_SLOTS.items():
-            items = []
-            protein_count = 0
-            max_protein = MAX_PROTEIN_ITEMS[meal]
+            items           = []
+            protein_count   = 0
+            fats_oils_count = 0
+            max_protein     = MAX_PROTEIN_ITEMS[meal]
+            max_fats_oils   = MAX_FATS_OILS_ITEMS[meal]
+            is_snack        = meal.startswith("Snack")
+            # FIX (Issue 3): per-category counter for snack slots
+            cat_counts      = {}
 
             for _ in range(cfg["count"]):
-                # FIX 2: If we've already placed max protein items this meal,
-                # exclude Protein category from picks for remaining slots
-                if protein_count >= max_protein:
-                    food = self._pick_food(
-                        MEAL_CATEGORIES[meal],
-                        exclude_cats={"Protein"}
-                    )
-                else:
-                    food = self._pick_food(MEAL_CATEGORIES[meal])
+                exclude_cats = set()
 
+                if protein_count >= max_protein:
+                    exclude_cats.add("Protein")
+
+                if fats_oils_count >= max_fats_oils:
+                    exclude_cats.add("Fats & Oils")
+
+                # FIX (Issue 3): exclude any snack category already at its limit
+                if is_snack:
+                    for cat, cnt in cat_counts.items():
+                        if cnt >= SNACK_MAX_PER_CATEGORY:
+                            exclude_cats.add(cat)
+
+                food = self._pick_food(
+                    MEAL_CATEGORIES[meal],
+                    exclude_cats=exclude_cats if exclude_cats else None,
+                    exclude_names=used_names,       # FIX (Issue 1)
+                )
+
+                # Update trackers
+                used_names.add(food["name"])        # FIX (Issue 1)
                 if food["category"] == "Protein":
                     protein_count += 1
+                if food["category"] == "Fats & Oils":
+                    fats_oils_count += 1
+                if is_snack:
+                    cat_counts[food["category"]] = cat_counts.get(food["category"], 0) + 1
 
                 grams = self._pick_grams(cfg["grams_range"])
                 items.append((food, grams))
@@ -138,10 +197,36 @@ class GeneticAlgorithm:
             meal_cals[meal] = round(cals, 1)
         return meal_cals
 
+    def _count_duplicates(self, plan):
+        """
+        FIX (Issue 1): Count how many food names appear more than once
+        across all meal slots in the day. Each extra occurrence = 1 violation.
+        """
+        seen = {}
+        for items in plan.values():
+            for food, _ in items:
+                seen[food["name"]] = seen.get(food["name"], 0) + 1
+        return sum(cnt - 1 for cnt in seen.values() if cnt > 1)
+
+    def _count_snack_cat_violations(self, plan):
+        """
+        FIX (Issue 3): Count snack slots where more than one item shares
+        the same category (e.g. Dairy + Dairy in Snack 1).
+        """
+        violations = 0
+        for meal, items in plan.items():
+            if not meal.startswith("Snack"):
+                continue
+            cat_counts = {}
+            for food, _ in items:
+                cat_counts[food["category"]] = cat_counts.get(food["category"], 0) + 1
+            violations += sum(cnt - 1 for cnt in cat_counts.values() if cnt > 1)
+        return violations
+
     def fitness(self, plan):
         t = self.get_totals(plan)
 
-        # Original macro penalty (unchanged weights)
+        # Macro accuracy penalty
         cal_dev  = abs(t["calories"] - self.target_calories) / self.target_calories
         prot_dev = abs(t["protein"]  - self.target_protein)  / max(self.target_protein, 1)
         carb_dev = abs(t["carbs"]    - self.target_carbs)    / max(self.target_carbs, 1)
@@ -149,34 +234,43 @@ class GeneticAlgorithm:
 
         macro_penalty = 0.40 * cal_dev + 0.30 * prot_dev + 0.20 * carb_dev + 0.10 * fat_dev
 
-        # FIX 1: Meal distribution penalty — penalise meals that are far from
-        # their target calorie share (allowed 40% swing either side)
-        meal_cals = self._get_meal_calories(plan)
+        # Meal distribution penalty (40% tolerance band per meal)
+        meal_cals    = self._get_meal_calories(plan)
         dist_penalty = 0.0
         for meal, target_cals in self.meal_cal_targets.items():
             if target_cals > 0:
-                dev = abs(meal_cals.get(meal, 0) - target_cals) / target_cals
-                # Only penalise deviations beyond a 40% tolerance
+                dev    = abs(meal_cals.get(meal, 0) - target_cals) / target_cals
                 excess = max(0.0, dev - 0.40)
                 dist_penalty += excess
         dist_penalty /= len(self.meal_cal_targets)
 
-        # FIX 3: Snack floor penalty — penalise snacks below minimum calories
+        # Snack floor penalty
         snack_penalty = 0.0
         for snack in ("Snack 1", "Snack 2"):
             snack_cals = meal_cals.get(snack, 0)
             if snack_cals < SNACK_MIN_CALORIES:
                 snack_penalty += (SNACK_MIN_CALORIES - snack_cals) / SNACK_MIN_CALORIES
 
-        # Combined penalty: macros 70%, meal distribution 20%, snack floor 10%
-        total_penalty = (0.70 * macro_penalty
-                       + 0.20 * dist_penalty
-                       + 0.10 * snack_penalty)
+        # FIX (Issue 1): Cross-meal duplicate penalty — each repeated food
+        # adds a hard 0.15 penalty, making duplicates very costly to keep
+        dup_penalty = self._count_duplicates(plan) * 0.15
+
+        # FIX (Issue 3): Snack same-category penalty
+        snack_cat_penalty = self._count_snack_cat_violations(plan) * 0.10
+
+        # Penalty weights:
+        # macros 60%, meal distribution 15%, snack floor 5%,
+        # cross-meal duplicates 15%, snack category diversity 5%
+        total_penalty = (0.60 * macro_penalty
+                       + 0.15 * dist_penalty
+                       + 0.05 * snack_penalty
+                       + 0.15 * dup_penalty
+                       + 0.05 * snack_cat_penalty)
 
         return round(1 / (1 + total_penalty), 6)
 
     def _tournament(self, population, fitnesses, k=3):
-        picks = random.sample(range(len(population)), k)
+        picks  = random.sample(range(len(population)), k)
         winner = max(picks, key=lambda i: fitnesses[i])
         return copy.deepcopy(population[winner])
 
@@ -194,34 +288,66 @@ class GeneticAlgorithm:
         return c1, c2
 
     def _mutate(self, plan):
+        # FIX (Issue 1): Build the day's used-name set before iterating so
+        # every swap is aware of what's already placed across all meals
+        used_names = {food["name"] for items in plan.values() for food, _ in items}
+
         for meal, items in plan.items():
-            protein_count = sum(1 for food, _ in items if food["category"] == "Protein")
-            max_protein = MAX_PROTEIN_ITEMS[meal]
+            protein_count   = sum(1 for food, _ in items if food["category"] == "Protein")
+            fats_oils_count = sum(1 for food, _ in items if food["category"] == "Fats & Oils")
+            max_protein     = MAX_PROTEIN_ITEMS[meal]
+            max_fats_oils   = MAX_FATS_OILS_ITEMS[meal]
+            is_snack        = meal.startswith("Snack")
 
             for i, (food, grams) in enumerate(items):
                 if random.random() < self.mutation_rate:
                     choice = random.choice(["swap", "grams"])
 
                     if choice == "swap":
-                        # FIX 2: Don't swap in a second protein if limit reached
-                        if food["category"] != "Protein" and protein_count >= max_protein:
-                            new_food = self._pick_food(
-                                MEAL_CATEGORIES[meal],
-                                exclude_cats={"Protein"}
-                            )
-                        else:
-                            # If swapping away from protein, update count
-                            if food["category"] == "Protein":
-                                protein_count -= 1
-                            new_food = self._pick_food(MEAL_CATEGORIES[meal])
-                            if new_food["category"] == "Protein":
-                                protein_count += 1
+                        exclude_cats = set()
+
+                        # Remove the food being replaced from used set
+                        # so it doesn't block its own replacement slot
+                        used_names.discard(food["name"])
+
+                        if food["category"] == "Protein":
+                            protein_count -= 1
+                        if food["category"] == "Fats & Oils":
+                            fats_oils_count -= 1
+
+                        if protein_count >= max_protein:
+                            exclude_cats.add("Protein")
+                        if fats_oils_count >= max_fats_oils:
+                            exclude_cats.add("Fats & Oils")
+
+                        # FIX (Issue 3): For snacks, block over-represented categories
+                        if is_snack:
+                            cat_counts = {}
+                            for j, (f2, _) in enumerate(items):
+                                if j != i:
+                                    cat_counts[f2["category"]] = cat_counts.get(f2["category"], 0) + 1
+                            for cat, cnt in cat_counts.items():
+                                if cnt >= SNACK_MAX_PER_CATEGORY:
+                                    exclude_cats.add(cat)
+
+                        new_food = self._pick_food(
+                            MEAL_CATEGORIES[meal],
+                            exclude_cats=exclude_cats if exclude_cats else None,
+                            exclude_names=used_names,   # FIX (Issue 1)
+                        )
+
+                        if new_food["category"] == "Protein":
+                            protein_count += 1
+                        if new_food["category"] == "Fats & Oils":
+                            fats_oils_count += 1
+
+                        used_names.add(new_food["name"])
                         plan[meal][i] = (new_food, grams)
 
                     elif choice == "grams":
-                        low, high = MEAL_SLOTS[meal]["grams_range"]
-                        delta = random.randint(-30, 30)
-                        new_grams = max(low, min(high, grams + delta))
+                        low, high  = MEAL_SLOTS[meal]["grams_range"]
+                        delta      = random.randint(-30, 30)
+                        new_grams  = max(low, min(high, grams + delta))
                         plan[meal][i] = (food, new_grams)
         return plan
 
@@ -246,7 +372,7 @@ class GeneticAlgorithm:
             if self.callback:
                 self.callback(gen + 1, top_fitness, best_plan)
 
-            # Keep the top performers as-is (elitism)
+            # Elitism: carry top performers unchanged into next generation
             sorted_pop = [x for _, x in sorted(zip(fitnesses, population),
                           key=lambda p: p[0], reverse=True)]
             next_gen = [copy.deepcopy(ind) for ind in sorted_pop[:self.elitism_count]]

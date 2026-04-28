@@ -1,8 +1,18 @@
 import csv
 import os
 
-# CSV file sits in the same folder as this script
-CSV_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "halal_foods.csv")
+
+def _find_csv():
+    candidates = [
+        os.path.join(os.path.dirname(os.path.abspath(__file__)), "halal_foods.csv"),
+        os.path.join(os.getcwd(), "halal_foods.csv"),
+    ]
+    for path in candidates:
+        if os.path.isfile(path):
+            return path
+    return candidates[0]
+
+CSV_PATH = _find_csv()
 
 
 def load_foods():

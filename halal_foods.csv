@@ -79,7 +79,7 @@ Pancakes (plain),Grains,227,6,28,10,0.9
 Lentils / Masoor Dal (cooked),Legumes,116,9,20,0.4,7.9
 Red Kidney Beans / Rajma (cooked),Legumes,127,8.7,22,0.5,7.4
 Chickpeas / Chana (cooked),Legumes,164,8.9,27,2.6,7.6
-Black Eyed Peas (cooked),Legumes,160,5.2,20,0.7,8
+Black Eyed Peas (cooked),Legumes,116,7.7,20.8,0.5,8
 Green Mung Beans (cooked),Legumes,105,7,19,0.4,7.6
 Split Peas / Chana Dal (cooked),Legumes,118,8.3,21,0.4,8.3
 Soybean (cooked),Legumes,173,17,10,9,6
@@ -114,7 +114,7 @@ Fenugreek Leaves / Methi,Vegetables,49,4.4,6,1,3.9
 Radish (raw),Vegetables,16,0.7,3.4,0.1,1.6
 Beetroot (cooked),Vegetables,44,1.7,10,0.2,2
 Spring Onion,Vegetables,32,1.8,7.3,0.2,2.6
-Moringa / Drumstick Leaves,Vegetables,64,9.4,8.3,1.4,2
+Moringa / Drumstick Leaves,Vegetables,64,4.9,8.5,1.4,2
 Tinda / Apple Gourd,Vegetables,18,0.5,3.9,0.2,0.6
 Arvi / Taro Root (cooked),Vegetables,142,0.5,34.6,0.1,4.3
 Fenugreek Seeds,Vegetables,323,23,58,6,25
@@ -163,7 +163,7 @@ Macadamia Nuts,Nuts & Seeds,718,8,14,76,8.6
 Peanut Butter,Nuts & Seeds,588,25,20,50,6
 Tahini,Nuts & Seeds,595,17,21,54,9.3
 Olive Oil,Fats & Oils,884,0,0,100,0
-Coconut Oil,Fats & Oils,862,0,0,100,0
+Coconut Oil,Fats & Oils,892,0,0,100,0
 Mustard Oil,Fats & Oils,884,0,0,100,0
 Ghee,Fats & Oils,900,0,0,100,0
 Sunflower Oil,Fats & Oils,884,0,0,100,0
