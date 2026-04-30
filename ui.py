@@ -22,30 +22,22 @@ class NutriGenApp(ctk.CTk):
 
         self.result = None
         self.ga_running = False
-        self._anim_jobs = []
-
         self._build_sidebar()
         self._build_main()
         self._show_welcome()
 
-    # ── Animation helpers ───────────────────────
-    def _fade_in(self, widget, duration=350, steps=12):
-        """Smooth fade-in by animating opacity from 0 -> 1."""
-        for job in self._anim_jobs:
-            try:
-                self.after_cancel(job)
-            except Exception:
-                pass
-        self._anim_jobs.clear()
+        self.protocol("WM_DELETE_WINDOW", self._on_close)
+
+    def _on_close(self):
+        """Clean shutdown — prevent dangling after-callbacks."""
+        import os, signal
         try:
-            widget.winfo_toplevel().attributes('-alpha', 1.0)
+            self.quit()
+            self.destroy()
         except Exception:
             pass
-        widget.configure(fg_color=BG_DARK)
-        interval = max(duration // steps, 10)
-        for i in range(steps + 1):
-            job = self.after(i * interval, lambda s=i: None)
-            self._anim_jobs.append(job)
+        os.kill(os.getpid(), signal.SIGTERM)
+
 
     def _card_3d(self, card):
         """Add 3D hover glow effect to a card frame."""
