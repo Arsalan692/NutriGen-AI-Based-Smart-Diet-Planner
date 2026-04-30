@@ -81,18 +81,3 @@ NutriGen doesn't just guess your meals. It "evolves" them:
 
 ---
 
-## 📸 Screenshots
-
-*(Add screenshots of your amazing new CustomTkinter UI here!)*
-*   *Welcome Screen*
-*   *Diet Plan Form*
-*   *Results Dashboard*
-*   *Matplotlib Visualizations*
-
----
-
-## 🤝 Contributing
-Contributions, issues, and feature requests are welcome! Feel free to check the [issues page](https://github.com/Arsalan692/NutriGen-AI-Based-Smart-Diet-Planner/issues).
-
-## 📝 License
-This project is open-source and available under the [MIT License](LICENSE).
